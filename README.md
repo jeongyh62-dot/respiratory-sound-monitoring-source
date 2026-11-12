@@ -50,6 +50,7 @@ Cycle WAV
 
 ## 폴더 구조
 
+```text
 respiratory-sound-monitoring-source/
 ├─ app/
 │  ├─ __init__.py
@@ -73,6 +74,7 @@ respiratory-sound-monitoring-source/
 ├─ .gitignore
 ├─ requirements.txt
 └─ README.md
+```
 
 ## Git 저장소에 포함하지 않는 파일
 
