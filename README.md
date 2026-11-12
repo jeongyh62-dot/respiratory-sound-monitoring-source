@@ -50,14 +50,15 @@ Cycle WAV
 
 ## 폴더 구조
 
-```text
-respiratory-sound-monitoring/
+respiratory-sound-monitoring-source/
 ├─ app/
+│  ├─ __init__.py
 │  ├─ main.py
 │  ├─ config.py
 │  ├─ model_service.py
 │  ├─ monitoring.py
 │  ├─ gradcam_service.py
+│  ├─ storage.py
 │  ├─ templates/
 │  │  └─ dashboard.html
 │  └─ static/
@@ -65,12 +66,13 @@ respiratory-sound-monitoring/
 │     │  └─ dashboard.css
 │     └─ js/
 │        └─ dashboard.js
+├─ notebooks/
+│  ├─ 02_TrackB_Mel_CNN.ipynb
+│  └─ 03_HF_Lung_external_validation.ipynb
 ├─ .env.example
 ├─ .gitignore
 ├─ requirements.txt
-├─ run.bat
 └─ README.md
-```
 
 ## Git 저장소에 포함하지 않는 파일
 
