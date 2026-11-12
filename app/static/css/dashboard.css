@@ -1,0 +1,84 @@
+/* v7: visual polish only — no inference/monitoring logic changes */
+html { font-size: 15px; }
+body {
+  font-family: Inter, "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+}
+
+/* Prevent dense header text from collapsing or becoming vertical. */
+header .min-w-max { min-width: max-content; }
+header nav a { white-space: nowrap; }
+
+/* Improve card readability while preserving Stitch layout. */
+main .rounded-xl {
+  border: 1px solid rgba(198, 198, 205, 0.22);
+}
+main .shadow-sm {
+  box-shadow: 0 1px 5px rgba(11, 28, 48, 0.05);
+}
+
+/* XAI canvases: crisp, readable and consistent aspect. */
+#mel-spectrogram-canvas,
+#gradcam-canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: auto;
+}
+
+/* Emphasize currently selected measurement row without overpowering content. */
+#measurement-history-body tr:hover {
+  background: rgba(219, 225, 255, 0.45);
+}
+
+/* Keep key metric values readable on medium screens. */
+@media (max-width: 1440px) {
+  html { font-size: 14px; }
+  aside { width: 15.5rem !important; }
+  .pl-72 { padding-left: 15.5rem !important; }
+}
+
+
+/* v9: metric card bilingual labels + single-line status badges */
+.metric-card-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.25;
+  min-width: 0;
+}
+.metric-card-title > span {
+  display: block;
+}
+.metric-card-title > span + span {
+  margin-top: 2px;
+}
+.metric-card-badge {
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* v10: stack Korean/English label only for 3-point rolling badge */
+.metric-card-badge-stacked {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.15;
+  text-align: center;
+}
+.metric-card-badge-stacked > span {
+  display: block;
+  white-space: nowrap;
+}
+.metric-card-badge-stacked > span + span {
+  margin-top: 2px;
+  font-size: 0.88em;
+}
+
+
+/* v11: one-page navigation */
+html {
+  scroll-behavior: smooth;
+}
+.anchor-section, #dashboard-top {
+  scroll-margin-top: 10.5rem;
+}

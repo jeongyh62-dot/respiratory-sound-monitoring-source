@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="/static/css/dashboard.css" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-fixed": "#dbe1ff",
+            "inverse-on-surface": "#eaf1ff",
+            "background": "#f8f9ff",
+            "primary-fixed-dim": "#bec6e0",
+            "surface-tint": "#565e74",
+            "on-tertiary-fixed": "#00201d",
+            "on-secondary-fixed-variant": "#003ea8",
+            "on-error-container": "#93000a",
+            "surface-container": "#e5eeff",
+            "on-secondary-container": "#fefcff",
+            "surface-dim": "#cbdbf5",
+            "outline": "#76777d",
+            "surface-container-lowest": "#ffffff",
+            "primary": "#000000",
+            "on-surface-variant": "#45464d",
+            "surface-variant": "#d3e4fe",
+            "surface": "#f8f9ff",
+            "tertiary-fixed": "#89f5e7",
+            "on-tertiary": "#ffffff",
+            "tertiary": "#000000",
+            "secondary": "#0051d5",
+            "on-error": "#ffffff",
+            "inverse-surface": "#213145",
+            "tertiary-fixed-dim": "#6bd8cb",
+            "surface-bright": "#f8f9ff",
+            "secondary-fixed-dim": "#b4c5ff",
+            "on-background": "#0b1c30",
+            "on-primary-container": "#7c839b",
+            "surface-container-low": "#eff4ff",
+            "on-tertiary-fixed-variant": "#005049",
+            "inverse-primary": "#bec6e0",
+            "on-primary": "#ffffff",
+            "secondary-container": "#316bf3",
+            "error-container": "#ffdad6",
+            "on-secondary-fixed": "#00174b",
+            "surface-container-highest": "#d3e4fe",
+            "on-surface": "#0b1c30",
+            "primary-fixed": "#dae2fd",
+            "outline-variant": "#c6c6cd",
+            "on-tertiary-container": "#0c9488",
+            "surface-container-high": "#dce9ff",
+            "primary-container": "#131b2e",
+            "on-primary-fixed": "#131b2e",
+            "on-secondary": "#ffffff",
+            "tertiary-container": "#00201d",
+            "error": "#ba1a1a",
+            "on-primary-fixed-variant": "#3f465c"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            "space-xl": "2rem",
+            "gutter-lg": "1.5rem",
+            "margin-lg": "2rem",
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "gutter": "1rem"
+          },
+          fontFamily: {
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "headline-xl": ["Inter", "sans-serif"],
+            "headline-lg": ["Inter", "sans-serif"],
+            "caption": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "metric-xl": ["JetBrains Mono", "monospace"],
+            "metric-md": ["JetBrains Mono", "monospace"],
+            "code-badge": ["JetBrains Mono", "monospace"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "metric-sm": ["JetBrains Mono", "monospace"],
+            "body-sm": ["Inter", "sans-serif"]
+          },
+          fontSize: {
+            "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "headline-md": ["18px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "headline-xl": ["30px", { lineHeight: "38px", letterSpacing: "-0.025em", fontWeight: "700" }],
+            "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "600" }],
+            "caption": ["11px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+            "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "metric-xl": ["28px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "600" }],
+            "metric-md": ["16px", { lineHeight: "20px", letterSpacing: "-0.01em", fontWeight: "500" }],
+            "code-badge": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }],
+            "headline-sm": ["15px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "metric-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+            "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md antialiased">
+<!-- TOP HEADER -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+<!-- Top Notice Disclaimer Strip -->
+<div class="w-full bg-surface-container-high px-margin py-space-xs flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[18px]">info</span>
+<span class="font-code-badge text-code-badge uppercase text-secondary font-semibold">연구용 프로토타입 (RESEARCH PROTOTYPE)</span>
+<span class="text-on-surface-variant font-caption text-caption">— 본 시스템은 호흡음 분류와 개인별 종적 변화 모니터링을 위한 연구용 프로토타입입니다. 의료 진단을 제공하거나 의료진의 임상적 판단을 대체하기 위한 시스템이 아닙니다.</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-code-badge text-code-badge text-on-surface-variant bg-surface-container px-space-xs py-0.5 rounded">FastAPI / PyTorch Core</span>
+</div>
+</div>
+<!-- Main Top Bar -->
+<div class="h-20 w-full px-margin flex items-center justify-between bg-surface-container-lowest">
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">pulmonology</span>
+</div>
+<div class="min-w-max">
+<div class="flex items-center gap-space-xs whitespace-nowrap">
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-bold whitespace-nowrap">개인 맞춤형 호흡음 모니터링</span>
+<span class="bg-surface-container px-space-xs py-0.5 rounded font-code-badge text-code-badge text-on-surface-variant">v0.8.4-rc</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant block whitespace-nowrap">Personalized Respiratory Sound Monitoring</span>
+</div>
+</div>
+<div class="h-8 w-px bg-surface-container"></div>
+<div class="flex items-center gap-space-md bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<div class="flex flex-col">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-medium">활성 코호트 대상자</span>
+<div class="flex items-center gap-space-xs">
+<span class="font-code-badge text-code-badge text-on-surface font-bold">{{ subject_id }}</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">(성인 코호트 B, 종적 추적)</span>
+</div>
+</div>
+<div class="h-6 w-px bg-surface-container-highest"></div>
+<div class="flex items-center gap-space-xs">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded-full flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>개인 기준선: 초기 3회 평균
+          </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-space-sm py-space-xs bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">schedule</span>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant leading-none">최근 측정</span>
+<span class="font-code-badge text-code-badge text-on-surface font-semibold">{{ latest.timestamp }}</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<button id="export-csv-btn-top" class="flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.03)]" type="button">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>CSV 내보내기</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">clinical_notes</span>
+<span>연구 노트</span>
+</button>
+<div class="flex items-center gap-space-xs px-space-sm py-space-xs bg-primary-container text-on-primary-fixed-variant rounded-lg">
+<span class="material-symbols-outlined text-secondary-fixed text-[16px]">memory</span>
+<span class="font-code-badge text-code-badge text-secondary-fixed font-semibold">AlexNet Base</span>
+</div>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+</div>
+</div>
+</div>
+<!-- Secondary Top Subnav -->
+<div class="w-full px-margin bg-surface-container-lowest flex items-center justify-between shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
+<nav class="flex items-center gap-space-xs py-space-xs">
+<a aria-current="page" class="px-space-md py-space-xs rounded transition-colors flex items-center gap-space-xs bg-secondary-fixed text-on-secondary-fixed font-semibold" href="#longitudinal-monitoring">모니터링 및 변화 추이 분석</a>
+<a class="px-space-md py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm flex items-center gap-space-xs" href="#xai-analysis">스펙트로그램 및 Grad-CAM 분석</a>
+<a class="px-space-md py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm flex items-center gap-space-xs" href="#batch-evaluation">배치 평가</a>
+<a class="px-space-md py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm flex items-center gap-space-xs" href="#cohort-statistics">코호트 통계</a>
+</nav>
+<div class="flex items-center gap-space-md font-code-badge text-code-badge text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>모델 입력: 4,000 Hz / 4.0 sec</span>
+<span class="text-outline-variant">|</span>
+<span>세션 토큰: #EXP-8891A</span>
+</div>
+</div>
+</header>
+<!-- SIDEBAR -->
+<aside class="fixed left-0 top-36 h-[calc(100vh-9rem)] w-72 bg-surface-container-low flex flex-col justify-between py-space-md px-space-sm z-40 shadow-[1px_0_8px_rgba(0,0,0,0.02)]">
+<div class="flex flex-col gap-space-md">
+<div class="px-space-sm flex flex-col gap-1">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary-fixed text-[18px]">pulmonology</span>
+</div>
+<span class="font-code-badge text-code-badge text-on-surface-variant bg-surface-container px-space-xs py-0.5 rounded">v0.8.4-rc</span>
+</div>
+<h1 class="font-headline-sm text-headline-sm text-on-surface leading-snug font-bold mt-1.5 break-keep whitespace-normal">개인 맞춤형 호흡음 모니터링</h1>
+<span class="font-caption text-caption text-on-surface-variant leading-tight block mt-0.5 break-keep">Personalized Respiratory Sound Monitoring</span>
+</div>
+<div class="h-px bg-surface-container my-space-xs"></div>
+<nav class="flex flex-col gap-1">
+<a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg bg-secondary-fixed text-on-secondary-fixed font-semibold transition-all" href="#dashboard-top">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span class="font-body-sm text-body-sm">대시보드</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" href="#new-measurement">
+<span class="material-symbols-outlined text-[18px]">upload</span>
+<span class="font-body-sm text-body-sm">새 측정</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" href="#measurement-history">
+<span class="material-symbols-outlined text-[18px]">table_chart</span>
+<span class="font-body-sm text-body-sm">측정 이력</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" href="#research-info">
+<span class="material-symbols-outlined text-[18px]">info</span>
+<span class="font-body-sm text-body-sm">연구 정보</span>
+</a>
+</nav>
+</div>
+<div class="px-space-sm flex flex-col gap-space-xs">
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-1 shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">대상자 정보</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<span class="font-code-badge text-code-badge text-on-surface font-bold">{{ subject_id }}</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded-full flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>개인 기준선: 초기 3회 평균
+        </span>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant pt-1 px-1">
+<span class="font-caption text-caption">엔진 상태</span>
+<span class="font-code-badge text-code-badge text-on-tertiary-container font-medium">CUDA 준비완료 (Ready)</span>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT WRAPPER -->
+<div class="pl-72">
+<main id="dashboard-top" class="relative pt-36 bg-background min-h-screen px-margin py-margin">
+<div class="flex flex-col w-full gap-space-lg">
+<!-- 1. AUDIO INGESTION & PIPELINE ACTION BAR -->
+<div id="new-measurement" class="anchor-section bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[24px]">graphic_eq</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">호흡음 입력 및 시퀀스 파이프라인 (Audio Ingestion &amp; Sequence Pipeline)</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded">4,000 Hz / 4.0 sec</span>
+<span id="active-measurement-badge" class="bg-surface-container text-on-surface-variant font-code-badge text-code-badge px-space-xs py-0.5 rounded">활성: {{ latest.measurement_id }}</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant">호흡주기 단위 WAV 파일을 선택하면 4,000 Hz / 4.0 sec 전처리 후 AlexNet Base로 분석합니다.</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-space-xs shrink-0">
+<div class="flex items-center gap-space-xs flex-wrap justify-end">
+<select id="subject-select" class="w-40 rounded-lg border-surface-container-highest bg-surface-container-low text-body-sm" aria-label="저장된 대상자 선택">
+<option value="">저장 대상자 선택</option>
+{% for subject in subjects %}
+<option value="{{ subject.subject_id }}" {% if subject.subject_id == subject_id %}selected{% endif %}>{{ subject.subject_id }} ({{ subject.measurement_count }})</option>
+{% endfor %}
+</select>
+<input id="subject-id-input" class="w-36 rounded-lg border-surface-container-highest bg-surface-container-low text-body-sm" type="text" value="{{ subject_id }}" aria-label="대상자 ID"/>
+<button id="load-subject-btn" class="bg-surface-container-low hover:bg-surface-container text-on-surface font-body-sm text-body-sm px-space-sm py-1.5 rounded-lg transition-all shadow-sm flex items-center gap-1" type="button" title="대상자 이력 불러오기">
+<span class="material-symbols-outlined text-[16px]">person_search</span><span>조회</span>
+</button>
+<input id="cycle-wav-input" class="hidden" type="file" accept=".wav,audio/wav"/>
+<button id="choose-wav-btn" class="bg-surface-container-low hover:bg-surface-container text-on-surface font-body-sm text-body-sm px-space-md py-1.5 rounded-lg transition-all shadow-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">upload_file</span>
+<span>파일 찾기</span>
+</button>
+<button id="run-inference-btn" class="bg-secondary hover:bg-secondary-container text-on-secondary font-body-sm text-body-sm px-space-md py-1.5 rounded-lg transition-all flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed" type="button">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+<span>추론 실행 (Cycle WAV)</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs font-caption text-caption text-on-surface-variant">
+<span id="selected-file-name">선택된 WAV 없음</span>
+<span id="analysis-status" class="font-code-badge text-code-badge"></span>
+</div>
+</div>
+</div>
+<!-- 2. 4 HERO METRIC CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Card 1: Current Prediction -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="metric-card-title font-caption text-caption uppercase text-on-surface-variant font-semibold tracking-wider"><span>AI 호흡음 분류</span><span>(AI SOUND CLASSIFICATION)</span></span>
+<span class="bg-error-container text-on-error-container font-code-badge text-code-badge px-space-xs py-0.5 rounded font-semibold">이상 호흡음 (Adventitious)</span>
+</div>
+<div>
+<span id="predicted-class" class="font-headline-xl text-headline-xl text-on-surface font-bold tracking-tight block">{{ latest.predicted_class }}</span>
+<div class="flex items-center gap-space-xs mt-1">
+<span id="confidence-badge" class="bg-surface-container-high text-on-surface font-code-badge text-code-badge px-space-xs py-0.5 rounded font-semibold">신뢰도: {{ "%.1f"|format(latest.confidence * 100) }}%</span>
+<span id="confidence-prob" class="font-caption text-caption text-on-surface-variant">(p={{ "%.3f"|format(latest.confidence) }})</span>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs border-t border-surface-container flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<span id="measurement-id-card">{{ latest.measurement_id }}</span>
+<span id="measurement-time-card" class="font-code-badge text-code-badge">{{ latest.timestamp }}</span>
+</div>
+</div>
+<!-- Card 2: Abnormal Probability -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="metric-card-title font-caption text-caption uppercase text-on-surface-variant font-semibold tracking-wider"><span>이상 호흡음 확률</span><span>(ABNORMAL PROBABILITY)</span></span>
+<span class="metric-card-badge bg-surface-container text-on-surface-variant font-code-badge text-code-badge px-space-xs py-0.5 rounded">0.00 - 1.00 범위</span>
+</div>
+<div>
+<div class="flex items-baseline gap-space-xs">
+<span id="abnormal-probability" class="font-metric-xl text-metric-xl text-on-surface font-bold">{{ "%.3f"|format(latest.abnormal_probability) }}</span>
+<span class="font-code-badge text-code-badge text-on-surface-variant">/ 1.00</span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden mt-2">
+<div id="abnormal-probability-bar" class="bg-secondary h-2.5 rounded-full" style="width: {{ (latest.abnormal_probability * 100)|round(1) }}%;"></div>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs border-t border-surface-container flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<span>Crackle + Wheeze + Both 합산</span>
+<span class="font-code-badge text-code-badge text-secondary font-semibold">진단 임계값 미사용</span>
+</div>
+</div>
+<!-- Card 3: Deviation from Personal Baseline -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="metric-card-title font-caption text-caption uppercase text-on-surface-variant font-semibold tracking-wider"><span>개인 기준선 대비 변화</span><span>(DEVIATION FROM BASELINE)</span></span>
+<span id="baseline-status-badge" class="metric-card-badge bg-secondary-fixed text-on-secondary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded font-semibold">{% if latest.baseline_ready %}기준선 형성 완료{% else %}기준선 형성 중 ({{ latest.measurement_count }}/3){% endif %}</span>
+</div>
+<div>
+<div class="flex items-baseline gap-space-xs flex-wrap">
+<span id="baseline-deviation" class="font-metric-xl text-metric-xl text-secondary font-bold">{% if latest.baseline_ready %}{{ "%+.3f"|format(latest.deviation) }}{% else %}—{% endif %}</span>
+<span id="baseline-deviation-label" class="font-body-sm text-body-sm text-on-surface-variant font-medium">{% if latest.baseline_ready %}개인 기준선 대비 ({{ "%+.3f"|format(latest.deviation) }}){% else %}초기 3회 측정 후 계산{% endif %}</span>
+</div>
+<span id="baseline-summary" class="font-caption text-caption text-on-surface-variant block mt-1">{% if latest.baseline_ready %}개인 기준선: {{ "%.3f"|format(latest.baseline) }} · 최근 3회 이동평균: {{ "%.3f"|format(latest.rolling_mean) }}{% else %}기준선 형성 중: {{ latest.measurement_count }}/3회 완료 · {{ latest.measurements_to_baseline }}회 추가 측정 필요{% endif %}</span>
+</div>
+<div class="mt-space-sm pt-space-xs border-t border-surface-container flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<span>Baseline N=3</span>
+<span class="font-code-badge text-code-badge text-secondary font-semibold">초기 3회 평균</span>
+</div>
+</div>
+<!-- Card 4: Trend Direction -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="metric-card-title font-caption text-caption uppercase text-on-surface-variant font-semibold tracking-wider"><span>최근 변화 방향</span><span>(TREND DIRECTION)</span></span>
+<span class="metric-card-badge metric-card-badge-stacked bg-surface-container-high text-on-surface font-code-badge text-code-badge px-space-xs py-0.5 rounded"><span>최근 3회 이동평균</span><span>(3-Point Rolling)</span></span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[22px]">trending_up</span>
+<span id="trend-direction" class="font-headline-md text-headline-md text-on-surface font-bold">{% if latest.baseline_ready %}{{ latest.trend_direction_ko }} ({{ latest.trend_direction }}){% else %}산출 대기{% endif %}</span>
+</div>
+<span id="trend-summary" class="font-caption text-caption text-on-surface-variant block mt-1">{% if latest.baseline_ready %}최근 slope: {{ "%+.4f"|format(latest.recent_slope) }}/{{ latest.recent_slope_unit or "measurement" }} · 이동평균: {{ "%.3f"|format(latest.rolling_mean) }}{% else %}초기 3회 측정 완료 후 최근 변화 방향을 계산합니다.{% endif %}</span>
+</div>
+<div class="mt-space-sm pt-space-xs border-t border-surface-container flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<span>통계적 지표</span>
+<span class="font-code-badge text-code-badge text-secondary font-semibold">진단적 위험도 판정 미사용</span>
+</div>
+</div>
+</div>
+<!-- 3. PERSONAL BASELINE COMPARISON & LONGITUDINAL TRAJECTORY -->
+<div id="longitudinal-monitoring" class="anchor-section bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">개인 기준선 비교 및 시간에 따른 변화 추이</span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded font-semibold">{{ subject_id }} 종적 모니터링 (Longitudinal)</span>
+<span id="observation-count" class="bg-surface-container text-on-surface-variant font-code-badge text-code-badge px-space-xs py-0.5 rounded">{{ history|length }}회 관측</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-0.5">개인별 보정 기준선 대비 이상 호흡음 확률의 종적 변화를 모니터링합니다. 개인 기준선 대비 변화 방향을 연구 목적으로 시각화합니다.</p>
+</div>
+<!-- Legend -->
+<div class="flex flex-wrap items-center gap-space-sm font-caption text-caption">
+<span class="flex items-center gap-1.5 text-on-surface font-semibold">
+<span class="w-3 h-0.5 bg-primary inline-block"></span>
+              이상 호흡음 확률 (Abnormal Prob [P(abn)])
+            </span>
+<span class="flex items-center gap-1.5 text-secondary font-semibold">
+<span class="w-3 h-0.5 bg-secondary inline-block border-b border-dashed"></span>
+              최근 3회 이동평균 (3-Pt Rolling Mean)
+            </span>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-medium">
+<span class="w-3 h-0.5 bg-outline inline-block"></span>
+<span id="baseline-legend-text">{% if latest.baseline_ready %}개인 기준선 (Subject Baseline: {{ "%.3f"|format(latest.baseline) }}){% else %}개인 기준선 (형성 중){% endif %}</span>
+            </span>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-medium">
+<span class="w-2.5 h-2.5 bg-surface-container-high inline-block rounded-sm"></span>
+              기준선 설정 구간 (초기 3회)
+            </span>
+</div>
+</div>
+<!-- Top Pair: Subject Calibration Stats Strip + Trajectory Chart -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Calibration Info Strip (Left) -->
+<div class="lg:col-span-3 bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between gap-space-sm">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">기준선 보정 지표 (CALIBRATION METRICS)</span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded font-semibold">Baseline N=3</span>
+</div>
+<div class="flex flex-col gap-space-xs mt-space-sm">
+<div class="bg-surface-container-lowest p-space-xs rounded flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant">기준선 평균 (μ_base):</span>
+<span id="chart-baseline-value" class="font-code-badge text-code-badge text-on-surface font-bold">{% if latest.baseline_ready %}{{ "%.3f"|format(latest.baseline) }}{% else %}—{% endif %}</span>
+</div>
+<div class="bg-surface-container-lowest p-space-xs rounded flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant">최근 3회 이동평균:</span>
+<span id="chart-rolling-value" class="font-code-badge text-code-badge text-on-surface font-bold">{% if latest.rolling_mean is not none %}{{ "%.3f"|format(latest.rolling_mean) }}{% else %}—{% endif %}</span>
+</div>
+<div class="bg-surface-container-lowest p-space-xs rounded flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant">현재 측정치:</span>
+<span id="chart-current-value" class="font-code-badge text-code-badge text-secondary font-bold">{% if history %}{{ "%.3f"|format(history[0].abnormal_probability) }}{% else %}—{% endif %}</span>
+</div>
+<div class="bg-surface-container-lowest p-space-xs rounded flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant">기준선 대비 변화 (Δ):</span>
+<span id="chart-deviation-value" class="font-code-badge text-code-badge text-secondary font-bold">{% if latest.deviation is not none %}{{ "%+.3f"|format(latest.deviation) }}{% else %}—{% endif %}</span>
+</div>
+<div class="bg-surface-container-lowest p-space-xs rounded flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant">최근 변화 방향:</span>
+<span id="chart-trend-value" class="font-code-badge text-code-badge text-secondary font-bold">{% if latest.baseline_ready %}{{ latest.trend_direction_ko }}{% else %}산출 대기{% endif %}</span>
+</div>
+</div>
+</div>
+<div id="chart-baseline-note" class="bg-surface-container p-space-xs rounded text-on-surface-variant font-caption text-caption leading-relaxed">
+<span class="font-semibold block text-on-surface mb-0.5">개인 기준선: 초기 3회 측정값의 평균</span>
+{% if latest.baseline_ready %}초기 3회 기준선이 형성되었습니다. 이후 측정치는 해당 기준선과 비교하여 표시합니다.{% else %}현재 {{ latest.measurement_count }}/3회 측정 완료. 기준선 형성 전에는 편차와 추세를 해석하지 않습니다.{% endif %}
+</div>
+</div>
+<!-- Main Longitudinal Trajectory Chart (Right) -->
+<div class="lg:col-span-9 bg-surface-container-low rounded-xl p-space-sm overflow-x-auto">
+<svg id="longitudinal-chart" class="w-full min-w-[700px] h-72 text-on-surface" fill="none" viewBox="0 0 920 280" xmlns="http://www.w3.org/2000/svg" aria-label="실제 측정 데이터 기반 종적 변화 그래프"></svg>
+</div>
+</div>
+<!-- Bottom Integrated Decomposition Strip -->
+<div class="border-t border-surface-container pt-space-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-xs mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">이상 호흡음 구성 변화</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded font-medium">실제 4-class 확률 추이</span>
+</div>
+<div class="flex items-center gap-space-md font-caption text-caption flex-wrap">
+<span class="flex items-center gap-1.5 text-on-surface font-semibold"><span class="w-3 h-0.5 inline-block" style="background:#F97316"></span>Crackle</span>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-medium"><span class="w-3 h-0.5 inline-block" style="background:#2563EB"></span>Wheeze</span>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-medium"><span class="w-3 h-0.5 inline-block" style="background:#374151"></span>Both</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-low rounded-lg p-space-sm overflow-x-auto">
+<svg id="component-chart" class="w-full min-w-[700px] h-36 text-on-surface" fill="none" viewBox="0 0 920 140" xmlns="http://www.w3.org/2000/svg" aria-label="Crackle Wheeze Both 확률 추이"></svg>
+</div>
+</div>
+</div>
+<!-- 4. EXPLAINABLE AI (XAI) SECTION: ACTUAL MEL + GRAD-CAM -->
+
+<!-- 4A. RESEARCH BATCH EVALUATION -->
+<section id="batch-evaluation" class="anchor-section bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+    <div>
+      <div class="flex items-center gap-space-xs flex-wrap">
+        <span class="material-symbols-outlined text-secondary text-[20px]">fact_check</span>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">배치 평가 (Batch Evaluation)</h2>
+        <span class="bg-secondary-fixed text-on-secondary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded">연구용 · 종적 이력과 분리</span>
+      </div>
+      <p class="font-caption text-caption text-on-surface-variant mt-1">여러 호흡주기 WAV를 한 번에 추론합니다. 파일명이 <code>_Normal/_Crackle/_Wheeze/_Both.wav</code>로 끝나면 정답 라벨을 자동 인식하여 Accuracy, Balanced Accuracy, Macro F1을 계산합니다. 이 결과는 대상자 SQLite 이력에 저장하지 않습니다.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-space-xs shrink-0">
+      <input id="batch-wav-input" type="file" accept=".wav,audio/wav" multiple class="hidden"/>
+      <button id="choose-batch-btn" type="button" class="bg-surface-container-low hover:bg-surface-container text-on-surface font-body-sm text-body-sm px-space-md py-1.5 rounded-lg transition-all shadow-sm flex items-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">library_add</span><span>여러 WAV 선택</span>
+      </button>
+      <button id="run-batch-btn" type="button" class="bg-secondary hover:bg-secondary-container text-on-secondary font-body-sm text-body-sm px-space-md py-1.5 rounded-lg transition-all flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+        <span class="material-symbols-outlined text-[16px]">play_circle</span><span>배치 평가 실행</span>
+      </button>
+      <button id="export-batch-csv-btn" type="button" class="bg-surface-container-low hover:bg-surface-container text-on-surface font-body-sm text-body-sm px-space-md py-1.5 rounded-lg transition-all shadow-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+        <span class="material-symbols-outlined text-[16px]">download</span><span>결과 CSV</span>
+      </button>
+    </div>
+  </div>
+  <div class="flex items-center justify-between gap-space-md flex-wrap">
+    <div class="flex items-center gap-space-sm">
+      <label class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+        <input id="batch-infer-labels" type="checkbox" checked/>
+        파일명에서 정답 라벨 자동 인식
+      </label>
+      <span id="batch-selected-count" class="font-code-badge text-code-badge text-on-surface-variant">선택 0개</span>
+    </div>
+    <span id="batch-status" class="font-code-badge text-code-badge text-on-surface-variant">대기</span>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-space-sm">
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">성공 파일</div><div id="batch-success-count" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">라벨 파일</div><div id="batch-labeled-count" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">Accuracy</div><div id="batch-accuracy" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">Balanced Accuracy</div><div id="batch-balanced" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">Macro F1</div><div id="batch-macro-f1" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+  </div>
+  <div class="overflow-x-auto border border-surface-container rounded-lg">
+    <table class="w-full min-w-[1050px] text-left">
+      <thead class="bg-surface-container-low">
+        <tr class="font-caption text-caption text-on-surface-variant uppercase">
+          <th class="px-space-sm py-space-xs">파일명</th><th class="px-space-sm py-space-xs">정답</th><th class="px-space-sm py-space-xs">예측</th><th class="px-space-sm py-space-xs">신뢰도</th><th class="px-space-sm py-space-xs">P(Normal)</th><th class="px-space-sm py-space-xs">P(Crackle)</th><th class="px-space-sm py-space-xs">P(Wheeze)</th><th class="px-space-sm py-space-xs">P(Both)</th><th class="px-space-sm py-space-xs">P[ABN]</th><th class="px-space-sm py-space-xs">판정</th>
+        </tr>
+      </thead>
+      <tbody id="batch-result-body" class="font-code-badge text-code-badge">
+        <tr><td colspan="10" class="px-space-sm py-space-md text-center text-on-surface-variant">WAV 파일을 선택하면 결과가 여기에 표시됩니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="batch-error-box" class="hidden bg-error-container/30 text-on-error-container rounded-lg p-space-sm font-caption text-caption"></div>
+  <p class="font-caption text-caption text-on-surface-variant">CPU 환경에서는 먼저 10~30개 정도의 소규모 배치로 검증하는 것을 권장합니다. 수백~수천 파일의 외부 검증은 이후 전용 스크립트/배치 워크플로우로 확장합니다.</p>
+</section>
+
+<!-- 4B. COHORT STATISTICS FROM CURRENT RESEARCH BATCH -->
+<section id="cohort-statistics" class="anchor-section bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+    <div>
+      <div class="flex items-center gap-space-xs flex-wrap">
+        <span class="material-symbols-outlined text-secondary text-[20px]">groups</span>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">코호트 통계 (Cohort Statistics)</h2>
+        <span class="bg-secondary-fixed text-on-secondary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded">현재 배치 기준 · 연구용 요약</span>
+      </div>
+      <p class="font-caption text-caption text-on-surface-variant mt-1">현재 배치 평가에 포함된 파일만 집계합니다. 파일명 첫 번째 숫자 토큰을 source subject ID로 간주하여 고유 대상자 수를 계산하며, 이 통계는 임상 유병률이나 모집단 분포를 의미하지 않습니다.</p>
+    </div>
+    <span id="cohort-status" class="font-code-badge text-code-badge text-on-surface-variant">배치 평가 후 표시</span>
+  </div>
+
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-space-sm">
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">배치 파일</div><div id="cohort-file-count" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">고유 Source Subject</div><div id="cohort-subject-count" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">라벨 파일</div><div id="cohort-labeled-count" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+    <div class="bg-surface-container-low rounded-lg p-space-sm"><div class="font-caption text-caption text-on-surface-variant">평균 P[ABN]</div><div id="cohort-mean-abn" class="font-headline-sm text-headline-sm font-bold">—</div></div>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-space-md">
+    <div class="border border-surface-container rounded-lg overflow-x-auto">
+      <div class="px-space-sm py-space-xs bg-surface-container-low font-body-sm text-body-sm font-semibold">클래스 분포</div>
+      <table class="w-full text-left min-w-[520px]">
+        <thead class="bg-surface-container-low"><tr class="font-caption text-caption text-on-surface-variant"><th class="px-space-sm py-space-xs">Class</th><th class="px-space-sm py-space-xs">정답 수</th><th class="px-space-sm py-space-xs">정답 비율</th><th class="px-space-sm py-space-xs">예측 수</th><th class="px-space-sm py-space-xs">예측 비율</th></tr></thead>
+        <tbody id="cohort-class-body" class="font-code-badge text-code-badge"><tr><td colspan="5" class="px-space-sm py-space-md text-center text-on-surface-variant">배치 평가 후 표시됩니다.</td></tr></tbody>
+      </table>
+    </div>
+    <div class="border border-surface-container rounded-lg overflow-x-auto">
+      <div class="px-space-sm py-space-xs bg-surface-container-low font-body-sm text-body-sm font-semibold">클래스별 성능</div>
+      <table class="w-full text-left min-w-[560px]">
+        <thead class="bg-surface-container-low"><tr class="font-caption text-caption text-on-surface-variant"><th class="px-space-sm py-space-xs">Class</th><th class="px-space-sm py-space-xs">Support</th><th class="px-space-sm py-space-xs">Precision</th><th class="px-space-sm py-space-xs">Recall</th><th class="px-space-sm py-space-xs">F1</th></tr></thead>
+        <tbody id="cohort-performance-body" class="font-code-badge text-code-badge"><tr><td colspan="5" class="px-space-sm py-space-md text-center text-on-surface-variant">정답 라벨이 있는 배치에서 계산됩니다.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="border border-surface-container rounded-lg overflow-x-auto">
+    <div class="px-space-sm py-space-xs bg-surface-container-low font-body-sm text-body-sm font-semibold">혼동행렬 (행 = 정답, 열 = 예측)</div>
+    <table class="w-full text-center min-w-[620px]">
+      <thead class="bg-surface-container-low"><tr class="font-caption text-caption text-on-surface-variant"><th class="px-space-sm py-space-xs text-left">True \ Pred</th><th class="px-space-sm py-space-xs">Both</th><th class="px-space-sm py-space-xs">Crackle</th><th class="px-space-sm py-space-xs">Normal</th><th class="px-space-sm py-space-xs">Wheeze</th></tr></thead>
+      <tbody id="cohort-confusion-body" class="font-code-badge text-code-badge"><tr><td colspan="5" class="px-space-sm py-space-md text-center text-on-surface-variant">배치 평가 후 표시됩니다.</td></tr></tbody>
+    </table>
+  </div>
+  <p class="font-caption text-caption text-on-surface-variant">해석 주의: 현재 선택한 배치 파일의 구성에 따라 값이 크게 달라집니다. 본 섹션은 연구용 기술 평가 요약이며 임상 집단 특성 또는 질병 위험을 추정하지 않습니다.</p>
+</section>
+
+<div id="xai-analysis" class="anchor-section bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm mb-space-md">
+    <div>
+      <div class="flex items-center gap-space-xs flex-wrap">
+        <span class="material-symbols-outlined text-secondary text-[22px]">troubleshoot</span>
+        <span class="font-headline-md text-headline-md text-on-surface font-bold">설명가능 AI (XAI) — Mel-Spectrogram 및 Grad-CAM 시각화</span>
+        <span class="bg-primary-container text-secondary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded" id="active-cam-record-id">측정 후 표시</span>
+      </div>
+      <p class="font-caption text-caption text-on-surface-variant">실제 Mel-Spectrogram과 AlexNet features[10] 기반 Grad-CAM 활성화 영역을 같은 시간-주파수 좌표에서 비교합니다.</p>
+    </div>
+    <div class="flex items-center gap-space-xs flex-wrap">
+      <span id="xai-config-badge" class="bg-surface-container text-on-surface font-caption text-caption px-space-sm py-1 rounded font-code-badge text-code-badge">4,000 Hz · 4.0 sec · N_FFT 512 · Hop 128</span>
+      <span id="xai-layer-badge" class="bg-tertiary-fixed text-on-tertiary-fixed font-caption text-caption px-space-sm py-1 rounded font-code-badge text-code-badge font-semibold">기여 레이어: AlexNet features[10]</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
+    <div class="bg-tertiary-container rounded-xl p-space-md text-on-tertiary flex flex-col justify-between">
+      <div class="flex items-center justify-between pb-space-xs text-on-primary-container font-code-badge text-code-badge">
+        <span class="text-tertiary-fixed font-bold">Mel-Spectrogram (Model Input)</span>
+        <span id="mel-axis-meta">0–2000 Hz · 0–4.0 sec</span>
+      </div>
+      <div class="relative w-full h-52 bg-[#090D16] rounded-lg overflow-hidden my-space-xs">
+        <canvas id="mel-spectrogram-canvas" class="w-full h-full block" aria-label="실제 Mel-Spectrogram"></canvas>
+        <div id="mel-empty-state" class="absolute inset-0 flex items-center justify-center text-slate-400 font-caption text-caption">WAV 분석 후 실제 Mel-Spectrogram이 표시됩니다.</div>
+      </div>
+      <div class="flex items-center justify-between text-on-primary-container font-code-badge text-code-badge text-[11px] pt-1">
+        <span id="mel-params">N_MELS 128 · N_FFT 512 · Hop 128</span>
+        <span>Relative dB → -80~0 dB clamp → 0~1 normalization</span>
+      </div>
+    </div>
+
+    <div class="bg-tertiary-container rounded-xl p-space-md text-on-tertiary flex flex-col justify-between">
+      <div class="flex items-center justify-between pb-space-xs text-on-primary-container font-code-badge text-code-badge">
+        <span class="text-tertiary-fixed font-bold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#EF4444]"></span>Grad-CAM 활성화 오버레이</span>
+        <span id="xai-target-class" class="text-secondary-fixed">목표 클래스: —</span>
+      </div>
+      <div class="relative w-full h-52 bg-[#090D16] rounded-lg overflow-hidden my-space-xs">
+        <canvas id="gradcam-canvas" class="w-full h-full block" aria-label="실제 Grad-CAM overlay"></canvas>
+        <div id="cam-empty-state" class="absolute inset-0 flex items-center justify-center text-slate-400 font-caption text-caption">WAV 분석 후 실제 Grad-CAM이 표시됩니다.</div>
+      </div>
+      <div class="flex items-center justify-between text-on-primary-container font-code-badge text-code-badge text-[11px] pt-1">
+        <span id="xai-layer-footer" class="text-tertiary-fixed">AlexNet features[10] Grad-CAM</span>
+        <span id="xai-target-footer">예측 클래스 기준 역전파</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md items-center pt-space-xs border-t border-surface-container">
+    <div class="lg:col-span-4 flex items-center gap-space-sm font-code-badge text-code-badge">
+      <span class="bg-surface-container px-space-xs py-0.5 rounded text-[11px] text-on-surface-variant">입력 길이: 4.0 sec</span>
+      <span class="text-on-surface-variant">주파수 범위: 0–2000 Hz</span>
+    </div>
+    <div class="lg:col-span-8 bg-surface-container-low p-space-xs px-space-sm rounded-lg flex items-center justify-between gap-space-sm">
+      <div class="flex flex-col gap-0.5">
+        <p class="font-caption text-caption text-on-surface font-medium leading-tight">강조된 영역은 AI 분류 결과에 상대적으로 크게 기여한 시간-주파수 영역을 나타냅니다.</p>
+        <p class="font-caption text-caption text-on-surface-variant leading-tight">본 시각화는 확정적인 임상적 근거를 의미하지 않습니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 5. COMPREHENSIVE MEASUREMENT HISTORY TABLE -->
+<div id="measurement-history" class="anchor-section bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm mb-space-md">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">측정 이력</span>
+<span id="history-count" class="bg-surface-container text-on-surface-variant font-code-badge text-code-badge px-space-xs py-0.5 rounded">{{ history|length }}개 관측 기록 등록</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">개인 기준선 대비 보정된 종적 측정 기록 아카이브입니다. 행을 선택하여 해당 호흡음의 Mel-Spectrogram 및 Grad-CAM 활성화 맵을 확인할 수 있습니다.</p>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap">
+<button id="export-csv-btn-history" class="bg-surface-container-low hover:bg-surface-container text-on-surface font-body-sm text-body-sm px-space-md py-space-xs rounded-lg transition-colors flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">file_download</span><span>CSV 내보내기</span>
+</button>
+<button id="export-json-btn-history" class="bg-surface-container-low hover:bg-surface-container text-on-surface font-body-sm text-body-sm px-space-md py-space-xs rounded-lg transition-colors flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">data_object</span><span>JSON 내보내기</span>
+</button>
+<button id="clear-subject-btn" class="bg-error-container hover:opacity-90 text-on-error-container font-body-sm text-body-sm px-space-md py-space-xs rounded-lg transition-colors flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">delete_sweep</span><span>대상자 기록 초기화</span>
+</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="w-full overflow-x-auto rounded-lg">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low font-caption text-caption uppercase text-on-surface-variant tracking-wider">
+<tr>
+<th class="py-space-sm px-space-md text-center">선택 (SEL)</th>
+<th class="py-space-sm px-space-md">측정 번호 (MEASUREMENT ID)</th>
+<th class="py-space-sm px-space-md">측정 일시 (TIMESTAMP)</th>
+<th class="py-space-sm px-space-md">예측 클래스 (PREDICTED CLASS)</th>
+<th class="py-space-sm px-space-md text-right">신뢰도 (CONFIDENCE)</th>
+<th class="py-space-sm px-space-md text-right">P(NORMAL)</th>
+<th class="py-space-sm px-space-md text-right">P(CRACKLE)</th>
+<th class="py-space-sm px-space-md text-right">P(WHEEZE)</th>
+<th class="py-space-sm px-space-md text-right">P(BOTH)</th>
+<th class="py-space-sm px-space-md text-right">이상 확률 (P[ABN])</th>
+<th class="py-space-sm px-space-md text-right">Δ Base</th>
+<th class="py-space-sm px-space-md text-center">동작</th>
+</tr>
+</thead>
+<tbody id="measurement-history-body" class="divide-y divide-surface-container">
+{% for row in history %}
+<tr class="measurement-row hover:bg-surface-container-low cursor-pointer transition-colors" data-measurement-id="{{ row.measurement_id }}">
+<td class="py-space-sm px-space-md text-center"><span class="row-indicator w-3.5 h-3.5 rounded-full bg-surface-container-highest inline-block"></span></td>
+<td class="py-space-sm px-space-md font-code-badge text-code-badge text-on-surface">{{ row.measurement_id }}</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">{{ row.timestamp }}</td>
+<td class="py-space-sm px-space-md"><span class="bg-secondary-fixed text-on-secondary-fixed font-code-badge text-code-badge px-space-xs py-0.5 rounded">{{ row.predicted_class }}</span></td>
+<td class="py-space-sm px-space-md font-metric-sm text-metric-sm text-right text-on-surface">{{ "%.1f"|format(row.confidence*100) }}%</td>
+<td class="py-space-sm px-space-md font-metric-sm text-metric-sm text-right">{{ "%.3f"|format(row.normal) }}</td>
+<td class="py-space-sm px-space-md font-metric-sm text-metric-sm text-right">{{ "%.3f"|format(row.crackle) }}</td>
+<td class="py-space-sm px-space-md font-metric-sm text-metric-sm text-right">{{ "%.3f"|format(row.wheeze) }}</td>
+<td class="py-space-sm px-space-md font-metric-sm text-metric-sm text-right">{{ "%.3f"|format(row.both) }}</td>
+<td class="py-space-sm px-space-md font-metric-sm text-metric-sm text-right font-bold">{{ "%.3f"|format(row.abnormal_probability) }}</td>
+<td class="py-space-sm px-space-md font-metric-sm text-metric-sm text-right text-secondary font-semibold">{% if row.deviation is not none %}{{ "%+.3f"|format(row.deviation) }}{% else %}—{% endif %}</td>
+<td class="py-space-sm px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="view-measurement-btn p-1 rounded hover:bg-surface-container" type="button" data-measurement-id="{{ row.measurement_id }}" title="저장된 측정 정보 확인"><span class="material-symbols-outlined text-on-surface-variant text-[18px]">visibility</span></button>
+<button class="delete-measurement-btn p-1 rounded hover:bg-error-container" type="button" data-measurement-id="{{ row.measurement_id }}" title="이 측정 삭제"><span class="material-symbols-outlined text-error text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<!-- Table Footer Meta -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs pt-space-md text-on-surface-variant font-caption text-caption">
+<span id="history-total-count">총 {{ history|length }}개 측정 기록 · 개인 기준선은 초기 3회 평균</span>
+<div class="flex items-center gap-space-sm font-code-badge text-code-badge">
+<span>영구 저장: SQLite</span>
+<span class="text-outline-variant">|</span>
+<span>대상자별 CSV 스냅샷 자동 저장</span>
+</div>
+</div>
+</div>
+<!-- 6. RESEARCH PROTOTYPE DISCLAIMER & RUNTIME STATUS -->
+<div id="research-info" class="anchor-section bg-surface-container rounded-xl p-space-md flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<span class="material-symbols-outlined text-secondary text-[24px] shrink-0 mt-0.5">verified_user</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">연구용 프로토타입</span>
+<span class="bg-surface-container-high text-on-surface font-code-badge text-code-badge px-space-xs py-0.5 rounded">연구용 PoC</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-1 leading-relaxed">
+              본 시스템은 호흡음 분류와 개인별 종적 변화 모니터링을 위한 연구용 프로토타입입니다. 의료 진단을 제공하거나 의료진의 임상적 판단을 대체하기 위한 시스템이 아닙니다.
+            </p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-md bg-surface-container-lowest p-space-sm rounded-lg shrink-0 shadow-sm">
+<div class="flex flex-col font-caption text-caption">
+<span class="text-on-surface-variant font-semibold">API 서버 백엔드</span>
+<span class="font-code-badge text-code-badge text-on-surface">127.0.0.1:8000</span>
+</div>
+<div class="h-6 w-px bg-surface-container hidden sm:block"></div>
+<div class="flex flex-col font-caption text-caption">
+<span class="text-on-surface-variant font-semibold">추론 지연 및 엔진</span>
+<span class="font-code-badge text-code-badge text-on-tertiary-container font-medium">PyTorch · CUDA 사용 가능 시 GPU 추론</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<!-- 실제 종적/구성 변화 그래프는 dashboard.js가 monitoring history를 기반으로 SVG로 렌더링합니다. -->
+<script id="initial-monitoring-data" type="application/json">{{ history | reverse | list | tojson }}</script>
+<script src="{{ url_for('static', path='/js/dashboard.js') }}"></script>
+</body></html>
