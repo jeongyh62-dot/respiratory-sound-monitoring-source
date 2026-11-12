@@ -1,0 +1,40 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model checkpoints
+*.pth
+*.pt
+*.ckpt
+
+# Data and experiment outputs
+data/
+data_processed/
+results/
+models/
+checkpoints/
+
+# Runtime storage
+*.db
+*.sqlite
+*.sqlite3
+
+# NumPy / generated artifacts
+*.npy
+*.npz
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
